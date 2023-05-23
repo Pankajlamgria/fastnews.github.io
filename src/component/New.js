@@ -9,6 +9,7 @@ const New =(props)=> {
   const [loading,setloading]=useState(true);
   const [page,setpage]=useState(1);
   const [totalresult,settotalresult]=useState(0);
+  // const[spinnerdark,setspinnerdark]=useState(false);
 
 
   const updateweb= async()=> {
@@ -19,7 +20,7 @@ const New =(props)=> {
     setloading(true);
     let dataofurl = await fetch(url);
     let jasonformofdata = await dataofurl.json();
-    console.log(jasonformofdata);
+    // console.log(jasonformofdata);
     setartics(jasonformofdata.articles);
     settotalresult(jasonformofdata.totalResults);
     window.scrollTo(0, 0);
@@ -36,8 +37,8 @@ const New =(props)=> {
     setloading(true);
     setTimeout(async () => {
       
-    setpage(page+1);
-      let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=073f7791006a41f0b76f6493b9b2f396&page=${page}&pageSize=${props.pageitem}`;
+      let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apikey}&page=${page+1}&pageSize=${props.pageitem}`;
+      setpage(page+1);
       document.title = `FastNews/${props.category}`;
       let dataofurl = await fetch(url);
       let jasonformofdata = await dataofurl.json();
@@ -57,20 +58,25 @@ const New =(props)=> {
   };
     return (
       <>
-        <InfiniteScroll 
+        <InfiniteScroll   
+        style={{overflow:"none"}}
           dataLength={articles.length}
           next={fetchMoreData}
           hasMore={articles.length !==totalresult}
-          loader={<Spinner/>}
+          loader={<Spinner theme={props.theme}/>}
         >
           <div className="container">
-            {(loading)?(<Spinner/>):("")}
-            <h2 className="text-center">{props.heading}</h2>
+            <div style={{marginTop:"55px"}}>
+            </div>
+            {(loading)?(<Spinner theme={props.theme}/>):("")}
+            <h2 className="text-center " style={{marginTop:"0px"}} >{props.heading}</h2>
             <div className="row ">
               {articles.map((element) => {
                 return (
-                  <div className="col-md-4 my-2" key={element.url}>
+              
+                  <div className="col-md-4 my-2" >
                     <Newsitem
+                      theme2={props.theme}
                       title={element.title == null ? "abc" : element.title}
                       description={
                         element.description == null
